@@ -1,0 +1,78 @@
+.page {
+  width: min(760px, 100% - 32px);
+  margin-inline: auto;
+  padding-block: clamp(32px, 8vh, 76px) 48px;
+}
+
+.header {
+  margin-bottom: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Three stacked bars at decreasing width: the outline itself, used as the mark. */
+.mark {
+  width: 18px;
+  height: 18px;
+  background:
+    linear-gradient(var(--accent) 0 0) 0 2px / 18px 2px no-repeat,
+    linear-gradient(var(--accent) 0 0) 5px 8px / 13px 2px no-repeat,
+    linear-gradient(var(--accent) 0 0) 10px 14px / 8px 2px no-repeat;
+}
+
+.title {
+  font-size: 21px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+}
+
+.hint {
+  margin-top: 6px;
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-inline: 4px;
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Each item carries its own separator, so hiding one on a narrow screen never
+   leaves a dangling dot behind. */
+.footer > * + *::before {
+  content: '·';
+  margin-inline-end: 8px;
+}
+
+.keys kbd {
+  padding: 1px 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+@media (max-width: 560px) {
+  .keys {
+    display: none;
+  }
+}

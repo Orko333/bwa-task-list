@@ -1,0 +1,30 @@
+.button {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--ink-muted);
+  border-radius: var(--radius-sm);
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.button:disabled {
+  opacity: 0.35;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
