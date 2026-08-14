@@ -1,0 +1,14 @@
+.list {
+  /* Rails hang from the disclosure arrow of the row above: 8px of row padding,
+     the 24px drag handle, then half of the 20px arrow. */
+  --rail-origin: 42px;
+
+  padding: 6px;
+}
+
+/* A drag that starts on a row must not paint a text selection across the rows it
+   passes over. */
+.dragging {
+  user-select: none;
+}
+
