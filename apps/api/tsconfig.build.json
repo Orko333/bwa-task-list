@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "comment": "seed.ts and prisma.config.ts run through tsx, never through nest build — keeping them out is what pins dist/ to the shape of src/",
+  "exclude": ["node_modules", "dist", "test", "prisma", "prisma.config.ts", "**/*spec.ts"]
+}
