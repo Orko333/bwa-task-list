@@ -1,0 +1,60 @@
+# Render blueprint: one PostgreSQL instance, the NestJS API, and the built
+# frontend served as a static site.
+#
+# Both build commands run from the repository root so the npm workspaces resolve,
+# and both pass --include=dev because Render sets NODE_ENV=production, which
+# would otherwise skip the compilers and the Prisma CLI.
+#
+# The two public URLs are marked `sync: false`, so Render asks for them when the
+# blueprint is created. `fromService` cannot supply them: its `host` property is
+# documented as the PRIVATE network hostname, which a browser cannot resolve, and
+# it does not accept a static site as the referenced service at all.
+
+databases:
+  - name: outline-db
+    plan: free
+    region: frankfurt
+    postgresMajorVersion: '17'
+    # Only the API talks to it, and it does so over the private network.
+    ipAllowList: []
+
+services:
+  - name: outline-api
+    type: web
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --include=dev && npm run build -w apps/api
+    startCommand: npm run db:deploy -w apps/api && npm run start:prod -w apps/api
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: DATABASE_URL
+        fromDatabase:
+          name: outline-db
+          property: connectionString
+      # The static site's public URL, e.g. https://outline-web.onrender.com
+      - key: CORS_ORIGIN
+        sync: false
+
+  # Static sites take no plan or region: they are served from the CDN.
+  - name: outline-web
+    type: web
+    runtime: static
+    buildCommand: npm ci --include=dev && npm run build -w apps/web
+    staticPublishPath: apps/web/dist
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      # The API's public URL, e.g. https://outline-api.onrender.com
+      - key: VITE_API_URL
+        sync: false
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
