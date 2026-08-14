@@ -1,0 +1,39 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--row-height);
+  padding-inline: 14px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  font-size: 14px;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.trigger:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.composer {
+  display: flex;
+  align-items: center;
+  min-height: var(--row-height);
+  padding: 6px 10px;
+  border-top: 1px solid var(--line);
+}
+
+/* Lines up with the task rows: same indentation step, same left edge as the
+   title of a row one level deeper than the parent. */
+.row {
+  display: flex;
+  align-items: center;
+  min-height: var(--row-height);
+  padding-inline-start: calc(var(--depth-offset) * var(--indent) + 42px);
+  padding-inline-end: 10px;
+  list-style: none;
+}

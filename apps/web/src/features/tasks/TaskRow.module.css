@@ -1,0 +1,220 @@
+.item {
+  position: relative;
+  list-style: none;
+}
+
+/* Depth rails: one hairline per ancestor level, drawn as a repeating gradient so
+   the number of lines follows --depth-offset without extra elements. The offset
+   lines them up with the disclosure arrow of the row each one belongs to. */
+.rails {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--rail-origin);
+  width: calc(var(--depth-offset) * var(--indent));
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--line) 0 1px,
+    transparent 1px var(--indent)
+  );
+  pointer-events: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--row-height);
+  padding-inline: 8px 10px;
+  margin-inline-start: calc(var(--depth-offset) * var(--indent));
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  /* The row is the drag handle, so a drag across it must not paint a text
+     selection on the way. */
+  user-select: none;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.row:active {
+  cursor: grabbing;
+}
+
+.row:hover,
+.row:focus-within {
+  background: var(--surface-hover);
+}
+
+/* The focus ring belongs on the row, not the list item: the item spans the whole
+   list and would draw a box across the indentation. */
+.item:focus-visible {
+  outline: none;
+}
+
+.item:focus-visible .row {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+/* Decoration now rather than a control: it says the row can be picked up, and
+   the whole row is what actually picks it up. */
+.handle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 28px;
+  flex: none;
+  color: var(--ink-faint);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.row:hover .handle,
+.row:focus-within .handle {
+  opacity: 1;
+}
+
+.disclosure {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--ink-faint);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+
+.disclosure:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.disclosure svg {
+  transition: transform var(--duration-base) var(--ease);
+}
+
+.expanded svg {
+  transform: rotate(90deg);
+}
+
+.spacer {
+  width: 20px;
+  flex: none;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  padding-inline-start: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pending {
+  color: var(--ink-muted);
+}
+
+.count {
+  flex: none;
+  margin-inline-start: 8px;
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.limit {
+  flex: none;
+  margin-inline-start: 8px;
+  padding: 1px 6px;
+  color: var(--limit);
+  background: var(--limit-soft);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: 1px;
+  margin-inline-start: 6px;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.row:hover .actions,
+.row:focus-within .actions {
+  opacity: 1;
+}
+
+/* Coarse pointers get no hover, so the controls have to stay visible. */
+@media (hover: none) {
+  .handle,
+  .actions {
+    opacity: 1;
+  }
+
+}
+
+/* Narrow screens keep the badge but drop the word: it is the only thing that
+   explains why this one row has no "add subtask" button, so it cannot go. */
+@media (max-width: 560px) {
+  .limitWord {
+    display: none;
+  }
+}
+
+/* Held for a moment on the row a keyboard move just relocated. A colour hold
+   rather than an animation, so it is still visible with reduced motion on. */
+.settled .row {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-line);
+}
+
+/* The row being dragged is its own preview: it follows the pointer vertically and
+   re-indents to the level the drop would produce, so the sideways half of the
+   gesture is visible while it is still being made. */
+.dragging {
+  z-index: 1;
+}
+
+.dragging .row {
+  background: var(--surface);
+  box-shadow:
+    0 0 0 1.5px var(--accent-line),
+    var(--shadow-lift);
+  cursor: grabbing;
+}
+
+.dragging .row {
+  cursor: grabbing;
+}
+
+.dragging .handle {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.dragging .actions,
+.dragging .limit {
+  visibility: hidden;
+}
+
+/* Number of rows travelling with the one under the cursor. */
+.branchSize {
+  flex: none;
+  min-width: 22px;
+  padding: 1px 7px;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-align: center;
+}

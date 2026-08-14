@@ -1,0 +1,16 @@
+.field {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding-inline: 8px;
+  margin-inline-start: 4px;
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
