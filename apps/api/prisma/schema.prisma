@@ -1,0 +1,36 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// A single node of the task tree.
+///
+/// The tree is stored as an adjacency list. Two columns are derived and kept in
+/// sync by TasksService instead of being computed on read:
+///   position - order among siblings, always a dense 0..n-1 sequence
+///   depth    - 1 for roots, parent.depth + 1 otherwise
+///
+/// Keeping depth on the row lets the API reject an illegal move with a single
+/// comparison, and lets the database enforce the nesting limit through a CHECK
+/// constraint (see the initial migration).
+model Task {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title    String  @db.VarChar(200)
+  parentId String? @map("parent_id") @db.Uuid
+  position Int
+  depth    Int
+
+  parent   Task?  @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children Task[] @relation("TaskHierarchy")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([parentId, position])
+  @@map("tasks")
+}
