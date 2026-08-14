@@ -1,0 +1,18 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+.env
+.env.local
+.env.*.local
+
+# Prisma 7 generates the client as TypeScript source; `npm run build` regenerates it
+apps/api/src/generated/
+
+.DS_Store
+*.log
+npm-debug.log*
+.idea/
+.vscode/
