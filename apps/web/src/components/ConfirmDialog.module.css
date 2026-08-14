@@ -1,0 +1,80 @@
+.dialog {
+  width: min(400px, calc(100vw - 32px));
+  /* The global reset zeroes every margin, which also removes the `margin: auto`
+     the browser uses to centre a modal dialog. */
+  margin: auto;
+  padding: 22px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  overscroll-behavior: contain;
+}
+
+.dialog::backdrop {
+  background: rgb(20 23 28 / 34%);
+  backdrop-filter: blur(2px);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  /* The task name goes in here verbatim and can be 200 characters with no
+     spaces in it. Nobody should confirm a delete they cannot read. */
+  overflow-wrap: anywhere;
+}
+
+.dialog {
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+}
+
+.body {
+  margin-top: 6px;
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.button {
+  height: 34px;
+  padding-inline: 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.cancel {
+  color: var(--ink-muted);
+}
+
+.cancel:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.confirm {
+  color: #fff;
+  background: var(--danger);
+}
+
+.confirm:hover {
+  background: var(--danger-hover);
+}
